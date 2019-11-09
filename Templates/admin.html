@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Admin Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+</head>
+<body>
+    <form action="{{ url_for('admin') }}" method="post">
+        <div class="container">
+          <!-- <label for="roomid"><b>Room No.</b></label>
+          <input type="number" placeholder="Enter Room No." name="roomid" required> -->
+      
+          <label for="floor"><b>Floor No.</b></label>
+          <input type="number" placeholder="Enter Floor No." name="floor" required>
+
+          <label for="type"><b>Type of Room</b></label>
+          <input type="text" placeholder="Enter room type" name="type" required>
+
+          <label for="price"><b>Price</b></label>
+          <input type="number" placeholder="Enter Price" name="price" required>
+
+          <label for="capacity"><b>Capacity</b></label>
+          <input type="number" placeholder="Enter Capacity" name="capacity" required>
+      
+          <button type="submit">Add Room</button>
+        
+        </div>
+    </form>
+</body>
+</html>

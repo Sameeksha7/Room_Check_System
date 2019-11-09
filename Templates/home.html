@@ -5,10 +5,63 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <script src="main.js"></script> -->
+    <script src="{{ url_for('static', filename='jquery-3.2.1.slim.min.js') }}" ></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}" ></script>
 </head>
 <body>
-    <h1>HELLO WORLD!</h1>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#"><img src="/static/imgs/logo.png"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+              
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                      <a class="nav-link" href="/userhome">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/userhistory">History <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/songInfo">Popular <span class="sr-only">(current)</span></a>
+                    </li>
+                  
+                </ul>
+                <ul class="nav justify-content-end">            
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Profile
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ url_for('signup') }}">Sign Up</a>
+                            <a class="dropdown-item" href="{{ url_for('login') }}">Login</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+    </nav>
+    <h1>ROOM AVAILABILITY CHECK SYSTEM !</h1>
+    {% for i in range (0,rooms|length) %}
+    <h1>FLOOR {{i+1}}</h1>
+        {% for room in rooms[i] %}
+            {% if room=={} %}
+                {% continue %}
+            {% endif %}
+            <div class="card" style="width: 18rem;" >
+                <img src="{{ url_for('static', filename='room.jpg') }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">{{ room.category }}</h5>
+                <p class="card-text">PRICE - {{ room.price }}</p>
+                <p class="card-text">OCCUPANCY - {{ room.capacity }}</p>
+                <a href="#" class="btn btn-primary">Book Now</a>
+                </div>
+            </div>
+        {% endfor %}
+        <br>
+    {% endfor %}
 </body>
 </html>

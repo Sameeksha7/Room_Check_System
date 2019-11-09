@@ -1,0 +1,22 @@
+create sequence room_id_seq;
+create trigger trg_room_id before insert on room
+  for each row
+    begin
+      select room_id_seq.nextval
+        into :new.id
+        from dual;
+    end;
+    /
+
+  
+create table booking (bookingid number primary key, roomid number,checkin date, checkout date, email varchar(100), foreign key(email) references userdata(emailid), foreign key(roomid) references room(id));
+
+create sequence booking_id_seq;
+create trigger trg_booking_id before insert on booking
+  for each row
+    begin
+      select booking_id_seq.nextval
+        into :new.bookingid
+        from dual;
+    end;
+    /
