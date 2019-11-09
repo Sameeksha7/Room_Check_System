@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css" /> -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- <script src="main.js"></script> -->
     <script src="{{ url_for('static', filename='jquery-3.2.1.slim.min.js') }}" ></script>
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}" ></script>
 </head>
@@ -44,7 +43,24 @@
                 </ul>
             </div>
     </nav>
-    <h1>ROOM AVAILABILITY CHECK SYSTEM !</h1>
+    <div>
+        <h1>ROOM AVAILABILITY CHECK SYSTEM !</h1>   
+    </div>
+    
+    <div>
+        <form action="{{ url_for('available') }}" method="post">
+                <div class="container">
+                        <label for="checkin"><b>From :</b></label>
+                        <input id="indate" type="date" placeholder="Enter checkin date" name="checkin" required onchange="setMinVal()">
+                    
+                        <label for="checkout"><b>To :</b></label>
+                        <input id="outdate" type="date" placeholder="Enter checkout date" name="checkout" required>
+                    
+                        <button type="submit">Show rooms</button>
+            
+                </div>
+        </form>
+    </div>
     {% for i in range (0,rooms|length) %}
     <h1>FLOOR {{i+1}}</h1>
         {% for room in rooms[i] %}
@@ -63,5 +79,12 @@
         {% endfor %}
         <br>
     {% endfor %}
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+       function setMinVal(){
+            var today = document.getElementById("indate").value;
+            document.getElementById("outdate").setAttribute('min', today);
+        }
+    </script>
 </body>
 </html>

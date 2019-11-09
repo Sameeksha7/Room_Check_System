@@ -107,5 +107,38 @@ def admin():
         'category':category,'price':price,'capacity':capacity})
     return render_template('admin.html')
 
+@app.route("/available", methods=['GET','POST'])
+def available():
+    checkindate = request.form.get('checkin')
+    checkoutdate = request.form.get('checkout')
+    from_entered = datetime.strptime(checkindate, '%Y-%m-%d').date()
+    to_entered = datetime.strptime(checkoutdate, '%Y-%m-%d').date()
+    engine.execute("create table tmp(id int, floor int, category varchar(50),price int, capacity int)")
+    engine.execute("insert into tmp (select r.id,r.floor,r.category,r.price,r.capacity from booking b join room r on r.id = b.roomid where :from_entered > checkout or :to_entered < checkin)",{'from_entered':from_entered,'to_entered':to_entered})
+    engine.execute("insert into tmp (select * from room where id not in (select roomid from booking))")
+    cnt = engine.execute("select count(*) from tmp")
+    for x in cnt:
+        print(x[0])
+    rooms = []
+    for i in range(4):
+        roomSet = engine.execute("select * from tmp where floor= :i",{'i':i})
+        subroom = []
+        flag=0
+        for room in roomSet:
+            roomid = room[0] 
+            floor = room[1]
+            category = room[2]
+            price = room[3]
+            capacity = room[4]
+            flag=1
+            item = {'roomid':roomid, 'floor': floor, 'category':category,'price':price,'capacity':capacity}
+            subroom.append(item)
+        if(flag==0):
+            subroom.append({})
+        rooms.append(subroom)
+    engine.execute("drop table tmp")
+    return render_template('available.html',rooms=rooms)
+
+
 if __name__ == '__main__':
     app.run(debug=True) 
