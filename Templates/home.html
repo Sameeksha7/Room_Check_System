@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
-    <script src="main.js"></script>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Page Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" media="screen" href="E:/Room_Check_System/static/homepage.css" />
+	<script src="main.js"></script>
 </head>
 <body>
-    <h1>HELLO WORLD!</h1>
+	{% for room in rooms %}
+	<div class="card">
+		<img src="E:/Room_Check_System/images/stay.jpg" alt="John" style="width:100%">
+		<h1>{{ room.category }}</h1>
+		<p class="title">Cost is Rs {{ room.price }}</p>
+		<p>Accomomodation for {{ room.capacity }}</p>
+		<div style="margin: 24px 0;">
+			<a href="#"><i class="fa fa-dribbble"></i></a> 
+			<a href="#"><i class="fa fa-twitter"></i></a>  
+			<a href="#"><i class="fa fa-linkedin"></i></a>  
+			<a href="#"><i class="fa fa-facebook"></i></a> 
+		</div>
+
+		<p><button>BOOk NOW</button></p>
+	</div>
+	{% endfor %}
 </body>
 </html>

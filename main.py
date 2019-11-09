@@ -10,13 +10,26 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = '2e3d9442882549964af284ca7d59f157'
 
-engine = create_engine('oracle://dhairya:dhai7735@localhost/orcl')
+engine = create_engine('oracle://system:Sritolia4@localhost/orcl')
 
 bcrypt = Bcrypt(app)
 
 @app.route("/")
 def home():
-    return render_template('home.html')
+    rooms = []
+    for i in range(4):
+        roomSet = engine.execute("select * from room where floor= :i",{'i':i})
+        subroom = []
+        for room in roomSet:
+            roomid = room[0] 
+            category = room[2]
+            price = room[3]
+            capacity = room[4]
+            item = {'roomid':roomid, 'category':category,'price':price,'capacity':capacity}
+            subroom.append(item)
+        rooms.append(subroom)
+
+    return render_template('home.html',rooms=rooms)
 
 @app.route("/login", methods=['GET','POST'])
 def login():
@@ -38,10 +51,7 @@ def login():
     if noofemails[0] == 1:
         if bcrypt.check_password_hash(reg[0] , password_entered) :
             flash('You have been logged in!', 'success')
-            if email_entered == 'iit2017080@iiita.ac.in':
-                return redirect(url_for('home'))
-            else:
-                return redirect(url_for('home'))
+            return redirect(url_for('home'))
         else:
             flash('Login Unsuccessful. Please check password', 'danger')
     else:
@@ -72,7 +82,7 @@ def signup():
             print("hello")
             date_object = datetime.strptime(dob, '%Y-%m-%d').date()
             print(date_object)
-            engine.execute("insert into UserData(FirstName, LastName, EmailId,Password,Phone,DOB) values (:firstname,:lastname,:email,:hashed_pw,:phone,:dob)",{'firstname':firstname,'lastname':lastname,
+            engine.execute("insert into userdata(firstname, lastname, emailid, password, phone, dob) values (:firstname,:lastname,:email,:hashed_pw,:phone,:dob)",{'firstname':firstname,'lastname':lastname,
                                 'email':email,'hashed_pw':hashed_pw, 'phone':phone, 'dob':date_object})
             print("why")
             flash(f'Account created for {firstname}!', 'success')
