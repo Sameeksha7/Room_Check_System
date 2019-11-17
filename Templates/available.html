@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="{{ url_for('static', filename='jquery-3.2.1.slim.min.js') }}" ></script>
     <script src="{{ url_for('static', filename='bootstrap.min.js') }}" ></script>
+    <script>
+        function storeID(id) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/book/"+id, true);
+            xhttp.send();
+        }
+    </script>
 </head>
 <body>
         {% for i in range (0,rooms|length) %}
@@ -18,13 +25,13 @@
                 {% if room=={} %}
                     {% continue %}
                 {% endif %}
-                <div class="card" style="width: 18rem;" >
+                <div class="card" style="width: 18rem; float:left;" >
                     <img src="{{ url_for('static', filename='room.jpg') }}" class="card-img-top" alt="...">
                     <div class="card-body">
                     <h5 class="card-title">{{ room.category }}</h5>
                     <p class="card-text">PRICE - {{ room.price }}</p>
                     <p class="card-text">OCCUPANCY - {{ room.capacity }}</p>
-                    <a href="#" class="btn btn-primary">Book Now</a>
+                    <a href="profile" class="btn btn-primary" onclick="storeID('{{room.roomid}}')">Book Now</a>
                     </div>
                 </div>
             {% endfor %}

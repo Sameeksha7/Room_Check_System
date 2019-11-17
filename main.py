@@ -16,6 +16,10 @@ engine = create_engine('oracle://dhairya:db99pb05@localhost/orcl')
 
 bcrypt = Bcrypt(app)
 
+checkindate = "18-NOV-19"
+checkoutdate = "19-NOV-19"
+current_email = "None"
+
 @app.route("/")
 def home():
     rooms = []
@@ -55,6 +59,8 @@ def login():
 
     if noofemails[0] == 1:
         if bcrypt.check_password_hash(reg[0] , password_entered) :
+            global current_email 
+            current_email = email_entered
             flash('You have been logged in!', 'success')
             if email_entered == 'iit2017080@iiita.ac.in':
                 return redirect(url_for('home'))
@@ -98,6 +104,10 @@ def signup():
 
 @app.route("/admin", methods=['GET','POST'])
 def admin():
+    return render_template('admin.html')
+
+@app.route("/addroom", methods=['GET','POST'])
+def addroom():
     floor = request.form.get('floor')
     category = request.form.get('type')
     price = request.form.get('price')
@@ -105,11 +115,13 @@ def admin():
     if floor!=None and category!=None and price!=None and capacity!=None:
         engine.execute("insert into room(floor,category,price,capacity) values(:floor,:category,:price,:capacity)",{'floor':floor,
         'category':category,'price':price,'capacity':capacity})
-    return render_template('admin.html')
+    return render_template('addroom.html')
 
 @app.route("/available", methods=['GET','POST'])
 def available():
+    global checkindate
     checkindate = request.form.get('checkin')
+    global checkoutdate
     checkoutdate = request.form.get('checkout')
     from_entered = datetime.strptime(checkindate, '%Y-%m-%d').date()
     to_entered = datetime.strptime(checkoutdate, '%Y-%m-%d').date()
@@ -139,6 +151,46 @@ def available():
     engine.execute("drop table tmp")
     return render_template('available.html',rooms=rooms)
 
+@app.route("/book/<roomid>", methods=['POST', 'GET']) 
+def book(roomid):
+    global checkin
+    global checkout
+    global current_email
+    from_entered = datetime.strptime(checkindate, '%Y-%m-%d').date()
+    to_entered = datetime.strptime(checkoutdate, '%Y-%m-%d').date()
+
+    if current_email == "None":
+        return redirect(url_for('login'))
+    engine.execute("insert into booking(roomid,checkin,checkout,email) values(:roomid,:from_entered,:to_entered,:current_email)",{'roomid':roomid,'from_entered':from_entered,'to_entered':to_entered,'current_email':current_email})
+    return render_template('book.html')
+
+@app.route("/profile", methods=['POST', 'GET']) 
+def profile():
+    global current_email
+    if current_email == "None":
+        return redirect(url_for('login'))
+
+    name = engine.execute("select firstname,lastname from userdata where emailid=:current_email",{'current_email':current_email})
+    for x in name:
+        firstname = x[0]
+        lastname = x[1]
+
+    bookings = engine.execute("select * from booking where email=:current_email",{'current_email':current_email})
+
+    bookedRooms = []
+    for book in bookings:
+        roomid = book[1]    
+        checkin = book[2]
+        checkout = book[3]
+
+        bookedRooms.append({'roomid':roomid,'checkin':checkin,'checkout':checkout})
+
+    return render_template('profile.html',fn = firstname,ln = lastname,bookedRooms=bookedRooms)
+
+@app.route("/cancel/<roomid>", methods=['POST', 'GET']) 
+def cancel(roomid):
+    engine.execute("delete from booking where roomid=:roomid",{'roomid':roomid})
+    return redirect(url_for('profile'))
 
 if __name__ == '__main__':
     app.run(debug=True) 
