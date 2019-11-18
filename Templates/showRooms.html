@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
+        <script src="../lib/jquery-1.10.2.min.js"></script>
+        <script src="../lib/underscore-1.5.2.min.js"></script>
+        <script src="../src/jquery.scrollTableBody-1.0.0.js"></script>
+        <script type="text/javascript" src="/html2canvas.js"></script>
+
+<script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <!-- <script type="text/javascript" src="adminTab.js"></script> -->
+  <title>Responsive Table</title>
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  
+      <link rel="stylesheet" href="static/insert_tour.css">
+  
+</head>
+
+<body>
+  <div class="overlay"></div>
+
+  <div id="throbber" style="display:none; min-height:120px;"></div>
+  <div id="noty-holder"></div>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <h1 class="webname">BOOK ROOM</h1>
+        </div>
+        <ul class="nav navbar-right top-nav">
+            <li><a href="#" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="Stats"><i class="fa fa-bar-chart-o"></i>
+                </a>
+            </li>            
+            <li class="dropdown admin">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin <b class="fa fa-angle-down "></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+     
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li>
+                    <a href="/books"> WELCOME PAGE</a>
+                </li>
+                <li>
+                     <a href="/addRoom">ADD ROOM</a>
+                </li>
+                <li>
+                     <a href="/addRoom">VIEW ROOMS</a>
+                </li>
+                <li>
+                    <a href="/showBookings">VIEW ALL BOOKINGS</a>
+                </li>
+                <li>
+                    <a href="/currentRoom">VIEW CURRENT BOOKINGS</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="space"></div>
+<div class="container">
+              <div class="overlay2" id="overlay2"></div>
+            <div id="TAB2" class="table-users TAB">
+                <div class="header">ROOM LIST</div>
+                     <table cellspacing="0" id="TAB3">
+                       <tr>
+                          <td colspan="6">
+                            <div id="myTable">
+                            <table>
+                     <tr >
+                         <th style="background-color: #b9d3ee">ROOM ID</th>
+                         <th style="background-color: #b9d3ee">FLOOR</th>
+                         <th style="background-color: #b9d3ee">ROOM TYPE</th>
+                         <th style="background-color: #b9d3ee">PRICE</th>
+                         <th style="background-color: #b9d3ee">CAPACITY</th>
+                         <th style="background-color: #b9d3ee">EDIT</th>
+                         <th style="background-color: #b9d3ee">DELETE</th>
+                     
+                         
+                      </tr>
+                            
+                            {% for i in rooms %}
+                              <tr>
+                                  <td>{{ i.roomid }}</td>
+                                  <td>{{ i.floor }}</td>
+                                  <td>{{ i.category}}</td>
+                                  <td>{{ i.price }}</td>
+                                  <td>{{ i.capacity }}</td>>
+                                  <td><button class="edit">edit</button></td>
+                                  <td><button class="delete">delete</button></td>
+                                </tr>    
+                            {% endfor %}
+                          </table>
+                          </div>
+                          </td>
+                          </tr>
+                      </table>
+                      <div><span id="errorname" style="color: red; text-align: center;">{{err}}</span></div>
+                </div>
+
+
+         
+          </div>
+         <div class="form1-popup" id="confirmform">
+  <form action="/deleteRoom" method="post" class="form1-container">
+    <h3>Are you sure to delete?</h3>
+    <input type="hidden" name="delId" id="delId" value="">
+    <button type="submit" class="btn" >Yes</button>
+    <button type="button" class="btn" onclick="closeForm()">No</button>
+  </form>
+</div> 
+
+          <div class="form2-popup" id="editform">
+            <form action="/updateRoom" method="post" class="form2-container">
+              <div class="row form-group">
+                <div class="col-md-12 box">
+                  <label for="roomid">Room Id</label>
+                  <br>
+                  <input type="text" id="roomid" name="roomid" class="form-control" value="">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12 box">
+                  <label for="category">Room Type</label>
+                  <input type="text" id="category" name="category" class="form-control" value="">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12 box">
+                  <label for="floor">Floor</label>
+                  <input type="text" id="floor" name="floor" class="form-control" value="">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12 box">
+                  <label for="sprice">Price</label>
+                  <input type="text" id="price" name="price" class="form-control" value="">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12 box">
+                  <label for="capacity">Capacity</label>
+                  <input type="text" id="capacity" name="capacity" class="form-control" value="">
+                </div>
+              </div>
+              <div class="row form-group">
+                <div class="col-md-12">
+                  <button type="submit" class="btn" >Save</button>
+                   <button type="button" class="btn" onclick="closeForm()">Cancel</button>
+                </div>
+              </div>
+            </form> 
+            </div>
+            
+</div>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+ $(document).ready(function(){
+              $('.delete').click(func);
+              function func(){
+                var $row = $(this).closest("tr"),     
+                $tds = $row.find("td:nth-child(1)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("delId").value = $val;
+                $("#confirmform").css("display","block");
+                $(".overlay2").css("display","block");
+              }
+            })
+
+            $(document).ready(function(){
+              $('.edit').click(func);
+              function func(){
+                var $row = $(this).closest("tr"),     
+                $tds = $row.find("td:nth-child(1)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("roomid").value = $val;
+                $("#roomid").attr('readonly','readonly');
+                $tds = $row.find("td:nth-child(2)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("floor").value = $val;
+                $tds = $row.find("td:nth-child(3)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("category").value = $val;
+                $tds = $row.find("td:nth-child(4)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("price").value = $val;
+                $tds = $row.find("td:nth-child(5)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("capacity").value = $val;
+                $("#editform").css("display","block");
+                $(".overlay2").css("display","block");
+              }
+            })
+
+            function closeForm() {
+              document.getElementById("confirmform").style.display = "none";
+              document.getElementById("editform").style.display = "none";
+             document.getElementById("overlay2").style.display = "none";
+
+            }
+       
+         
+           
+
+</script>
+</body>
+
+</html>
