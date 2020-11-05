@@ -20,3 +20,5 @@ create trigger trg_booking_id before insert on booking
         from dual;
     end;
     /
+
+create table userdata(firstname varchar(50),lastname varchar(50),emailid varchar(200) primary key,password varchar(200),phone varchar(10),dob date);

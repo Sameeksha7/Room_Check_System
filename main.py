@@ -15,10 +15,17 @@ app.config['SECRET_KEY'] = '2e3d9442882549964af284ca7d59f157'
 engine = create_engine('oracle://system:sqlplus@localhost/orcl')
 
 
+<<<<<<< HEAD
 bcrypt = Bcrypt(app)
 checkindate = "18-NOV-19"
 checkoutdate = "19-NOV-19"
 current_email = "None"
+=======
+checkindate = "18-NOV-19"
+checkoutdate = "19-NOV-19"
+current_email = "None"
+
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
 @app.route("/")
 def home():
 
@@ -41,7 +48,14 @@ def home():
             subroom.append({})
         rooms.append(subroom)
 
-    return render_template('home.html',rooms=rooms)
+    return render_template('index.html',rooms=rooms)
+
+@app.route("/logout")
+def logout():
+    global current_email
+    current_email = "None"
+    print(current_email)
+    return redirect(url_for('home'))
 
 isLoggedin=0
 bookingp=0
@@ -62,6 +76,8 @@ def login():
 
     if noofemails[0] == 1:
         if bcrypt.check_password_hash(reg[0] , password_entered) :
+            global current_email 
+            current_email = email_entered
             flash('You have been logged in!', 'success')
             global isLoggedin,bookingp
             isLoggedin=1
@@ -106,15 +122,9 @@ def signup():
 
 @app.route("/admin", methods=['GET','POST'])
 def admin():
-    floor = request.form.get('floor')
-    category = request.form.get('type')
-    price = request.form.get('price')
-    capacity = request.form.get('capacity')
-    if floor!=None and category!=None and price!=None and capacity!=None:
-        engine.execute("insert into room(floor,category,price,capacity) values(:floor,:category,:price,:capacity)",{'floor':floor,
-        'category':category,'price':price,'capacity':capacity})
     return render_template('admin.html')
 
+<<<<<<< HEAD
 @app.route("/available", methods=['GET','POST'])
 def available():
     checkindate = request.form.get('checkin')
@@ -128,6 +138,34 @@ def available():
     engine.execute("insert into tmp (select * from room where id not in (select roomid from booking))")
     engine.execute("delete from tmp where id in (select roomid from booking where :from_entered > checkout or :to_entered < checkin)",{'from_entered':from_entered,'to_entered':to_entered})
     cnt = engine.execute("select count(*) from tmp")
+=======
+# @app.route("/addroom", methods=['GET','POST'])
+# def addroom():
+#     floor = request.form.get('floor')
+#     category = request.form.get('type')
+#     price = request.form.get('price')
+#     capacity = request.form.get('capacity')
+#     if floor!=None and category!=None and price!=None and capacity!=None:
+#         engine.execute("insert into room(floor,category,price,capacity) values(:floor,:category,:price,:capacity)",{'floor':floor,
+#         'category':category,'price':price,'capacity':capacity})
+#     return render_template('addroom.html')
+
+@app.route("/available", methods=['GET','POST'])
+def available():
+    global checkindate
+    checkindate = request.form.get('checkin')
+    global checkoutdate
+    checkoutdate = request.form.get('checkout')
+    from_entered = datetime.strptime(checkindate, '%Y-%m-%d').date()
+    to_entered = datetime.strptime(checkoutdate, '%Y-%m-%d').date()
+    engine.execute("create table tmp(id int, floor int, category varchar(50),price int, capacity int)")
+    # engine.execute("insert into tmp (select r.id,r.floor,r.category,r.price,r.capacity from booking b join room r on r.id = b.roomid where :from_entered > checkout or :to_entered < checkin)",{'from_entered':from_entered,'to_entered':to_entered})
+    engine.execute("insert into tmp (select * from room)")
+    engine.execute("delete from tmp where id in (select roomid from booking where :from_entered <= checkout and :to_entered >= checkin)",{'from_entered':from_entered,'to_entered':to_entered})
+    cnt = engine.execute("select count(*) from tmp")
+    for x in cnt:
+        print(x[0])
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
     rooms = []
     for i in range(4):
         roomSet = engine.execute("select * from tmp where floor= :i",{'i':i})
@@ -146,10 +184,97 @@ def available():
             subroom.append({})
         rooms.append(subroom)
     engine.execute("drop table tmp")
+<<<<<<< HEAD
     return render_template('available.html',rooms=rooms,indate=from_entered,outdate=to_entered)
 
 
     return render_template('login.html')
+=======
+    return render_template('available.html',rooms=rooms)
+
+@app.route("/book/<roomid>", methods=['POST', 'GET']) 
+def book(roomid):
+    global checkin
+    global checkout
+    global current_email
+    from_entered = datetime.strptime(checkindate, '%Y-%m-%d').date()
+    to_entered = datetime.strptime(checkoutdate, '%Y-%m-%d').date()
+
+    if current_email == "None":
+        return redirect(url_for('login'))
+    engine.execute("insert into booking(roomid,checkin,checkout,email) values(:roomid,:from_entered,:to_entered,:current_email)",{'roomid':roomid,'from_entered':from_entered,'to_entered':to_entered,'current_email':current_email})
+    return render_template('book.html')
+
+# @app.route("/profile", methods=['POST', 'GET']) 
+# def profile():
+#     global current_email
+#     if current_email == "None":
+#         return redirect(url_for('login'))
+
+#     name = engine.execute("select firstname,lastname from userdata where emailid=:current_email",{'current_email':current_email})
+#     for x in name:
+#         firstname = x[0]
+#         lastname = x[1]
+
+#     bookings = engine.execute("select * from booking where email=:current_email",{'current_email':current_email})
+
+#     bookedRooms = []
+#     for book in bookings:
+#         roomid = book[1]    
+#         checkin = book[2]
+#         checkout = book[3]
+
+#         bookedRooms.append({'roomid':roomid,'checkin':checkin,'checkout':checkout})
+
+#     return render_template('profile.html',fn = firstname,ln = lastname,bookedRooms=bookedRooms)
+
+@app.route("/profile", methods=['POST', 'GET'])
+def profile():
+    global current_email
+    if current_email == "None":
+        return redirect(url_for('login'))
+
+    name = engine.execute("select firstname,lastname from userdata where emailid=:current_email",{'current_email':current_email})
+    for x in name:
+        firstname = x[0]
+        lastname = x[1]
+
+    pastbookings = engine.execute("select * from booking where email=:current_email and checkout<(select current_date from dual)",{'current_email':current_email})
+    presentbookings=engine.execute("select * from booking where email=:current_email and checkout>=(select current_date from dual) and checkin<=(select current_date from dual)",{'current_email':current_email})
+    futurebookings=engine.execute("select * from booking where email=:current_email and checkin>(select current_date from dual)",{'current_email':current_email})
+    pastbookedRooms = []
+    for book in pastbookings:
+        bookingid = book[0]
+        roomid = book[1]    
+        checkin = book[2]
+        checkout = book[3]
+
+        pastbookedRooms.append({'bookingid':bookingid,'roomid':roomid,'checkin':checkin,'checkout':checkout})
+    presentbookedRooms = []
+    for book in presentbookings:
+        bookingid = book[0]
+        roomid = book[1]    
+        checkin = book[2]
+        checkout = book[3]
+
+        presentbookedRooms.append({'bookingid':bookingid,'roomid':roomid,'checkin':checkin,'checkout':checkout})
+    futurebookedRooms = []
+    for book in futurebookings:
+        bookingid = book[0]
+        roomid = book[1]    
+        checkin = book[2]
+        checkout = book[3]
+
+        futurebookedRooms.append({'bookingid':bookingid,'roomid':roomid,'checkin':checkin,'checkout':checkout})
+
+    return render_template('profile.html',fn = firstname,ln = lastname,pastbookedRooms=pastbookedRooms,presentbookedRooms=presentbookedRooms,futurebookedRooms=futurebookedRooms)
+
+@app.route("/cancel/<bookingid>", methods=['POST', 'GET']) 
+def cancel(bookingid):
+    engine.execute("delete from booking where bookingid=:bookingid",{'bookingid':bookingid})
+    redirect(url_for('profile'))
+
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
 @app.route("/books", methods=['GET','POST'])
 def books():
     return render_template('first.html')
@@ -186,7 +311,15 @@ def updateRoom():
 @app.route("/deleteRoom", methods=['GET','POST'])
 def deleteRoom():
     roomid=request.form.get('delId')
+<<<<<<< HEAD
     engine.execute("delete from room where id=:roomid",{'roomid':roomid})
+=======
+    cnt = engine.execute("select count(*) from booking where roomid=:roomid",{'roomid':roomid})
+    for x in cnt:
+        count = x[0]
+    if count==0:
+        engine.execute("delete from room where id=:roomid",{'roomid':roomid})
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
     return redirect(url_for('showRooms'))
 
 @app.route("/currentRoom", methods=['GET','POST'])
@@ -209,7 +342,11 @@ def insertRoom():
     price= request.form.get('price')
     capacity= request.form.get('capacity')
     types= request.form.get('type')
+<<<<<<< HEAD
     engine.execute("insert into room(id,floor,category,price,capacity) values (103,:floor,:type,:price,:capacity)",{'floor':floor,
+=======
+    engine.execute("insert into room(floor,category,price,capacity) values (:floor,:type,:price,:capacity)",{'floor':floor,
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
         'type':types,'price':price,'capacity':capacity})
     return render_template('first.html')
 
@@ -235,6 +372,7 @@ def checkoutRoom():
     engine.execute("delete from booking where bookingid=:bookingid",{'bookingid':bookingid})
     return redirect(url_for('currentRoom'))
 
+<<<<<<< HEAD
 @app.route("/book/<roomid>", methods=['POST', 'GET']) 
 def book(roomid):
     global checkin
@@ -291,6 +429,8 @@ def cancel(roomid):
     engine.execute("delete from booking where roomid=:roomid",{'roomid':roomid})
     return redirect(url_for('profile'))
 
+=======
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
 @app.route("/adminlogin", methods=['POST', 'GET']) 
 def adminlogin():
     return render_template('adminlogin.html')
@@ -299,8 +439,15 @@ def adminlogin():
 def correctadminlogin():
     name= request.form.get('fullname')
     password= request.form.get('pass')
+<<<<<<< HEAD
     if(password=='sqlplus'):
         return redirect(url_for('books'))
+=======
+    if(password=='db99pb05'):
+        return redirect(url_for('books'))
+    else:
+        return redirect(url_for('adminlogin'))
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
 
 if __name__ == '__main__':
     app.run(debug=True) 

@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,9 +11,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Profile</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< HEAD
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="main.js"></script>
+=======
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='profile.css') }}" >
+    <script src="main.js"></script>
+    <script src="{{ url_for('static', filename='jquery-3.2.1.slim.min.js') }}" ></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}" ></script>
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
     <script>
             function storeID(id){
                 var xhttp = new XMLHttpRequest();
@@ -15,8 +29,39 @@
                 xhttp.send();
             }
     </script>
+<<<<<<< HEAD
 </head> 
 <body>
+=======
+</head>
+<body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <!-- <a class="navbar-brand" href="#"><img src="/static/imgs/logo.png"></a> -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                  
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                          <a class="nav-link" href="{{ url_for('home') }}">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        
+                      
+                    </ul>
+                    <ul class="nav justify-content-end">            
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Profile
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
     <h1>Welcome {{ fn }} {{ ln }}!</h1>
     <h3>Your Past Bookings</h3>
     <table class="table">
@@ -25,7 +70,11 @@
             <th scope="row">Room ID</th>
             <th scope="row">Checkin</th>
             <th scope="row">Checkout</th>
+<<<<<<< HEAD
             <th scope="row">Cancel Booking</th>
+=======
+            <th scope="row" style="color: rgb(225, 247, 246);">Cancel Booking</th>
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
           </tr>
         </thead>
 
@@ -35,7 +84,11 @@
                 <td>{{ booking.roomid }}</td>
                 <td>{{ booking.checkin }}</td>  
                 <td>{{ booking.checkout }}</td>
+<<<<<<< HEAD
                 <td><button type="button" class="btn btn-danger" onclick="storeID('{{booking.roomid}}')">Cancel</button></td>
+=======
+                <td><button type="button" hidden class="btn btn-danger" onclick="storeID('{{booking.bookingid}}')">Cancel</button></td>
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
           </tr>
             {% endfor %}
         </tbody>
@@ -47,7 +100,11 @@
             <th scope="row">Room ID</th>
             <th scope="row">Checkin</th>
             <th scope="row">Checkout</th>
+<<<<<<< HEAD
             <th scope="row">Cancel Booking</th>
+=======
+            <th scope="row" style="color: rgb(225, 247, 246);">Cancel Booking</th>
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
           </tr>
         </thead>
 
@@ -57,12 +114,20 @@
                 <td>{{ booking.roomid }}</td>
                 <td>{{ booking.checkin }}</td>  
                 <td>{{ booking.checkout }}</td>
+<<<<<<< HEAD
                 <td><button type="button" class="btn btn-danger" onclick="storeID('{{booking.roomid}}')">Checkout</button></td>
+=======
+                <!-- <td><button type="button" class="btn btn-danger" onclick="storeID('{{booking.bookingid}}')">Checkout</button></td> -->
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
           </tr>
             {% endfor %}
         </tbody>
     </table>
+<<<<<<< HEAD
     <h3>Your Future Bookings</h3> 
+=======
+    <h3>Your Future Bookings</h3>
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147
     <table class="table">
         <thead>
           <tr>
@@ -79,6 +144,7 @@
                 <td>{{ booking.roomid }}</td>
                 <td>{{ booking.checkin }}</td>  
                 <td>{{ booking.checkout }}</td>
+<<<<<<< HEAD
                 <td><button type="button" hidden class="btn btn-danger" onclick="storeID('{{booking.roomid}}')">Cancel</button></td>
           </tr>
             {% endfor %}
@@ -86,3 +152,13 @@
     </table>   
 </body>
 </html>
+=======
+                <td><button type="button" class="btn btn-danger" onclick="storeID('{{booking.bookingid}}')">Cancel</button></td>
+          </tr>
+            {% endfor %}
+        </tbody>
+    </table>  
+</body>
+</html>
+
+>>>>>>> 7a9e084ed4bb04f111fd9658bece3dbf75031147

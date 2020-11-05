@@ -1,36 +1,65 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Login</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='loginpage.css') }}" >
-    <script src="main.js"></script>
+<title>User SignIn</title>
+<link rel="stylesheet" href="static/style2.css">
 </head>
+
 <body>
-    <form action="{{ url_for('login') }}" method="post">
-        <!-- <div class="imgcontainer">
-          <img src="img_avatar2.png" alt="Avatar" class="avatar">
-        </div> -->
-      
-        <div class="container">
-          <label for="email"><b>Email</b></label>
-          <input type="email" placeholder="Enter email" name="email" required>
-      
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-      
-          <button type="submit">Login</button>
-          <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-        </div>
-      
-        <div class="container" style="background-color:#f1f1f1">
-          <button type="button" class="cancelbtn">Cancel</button>
-          <span class="psw">Forgot <a href="#">password?</a></span>
-        </div>
-      </form>
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(images/img_1.jpg); position: fixed;">
+		<div class="overlay"></div>
+		
+		<div class="gtco-container" >
+		<div class="col-md-7 mt-text animate-box heading" data-animate-effect="fadeInUp">
+		    <h1 style="text-align: center;">USER LOGIN PAGE</h1>
+		</div>
+			<div class="row" id="rowcss">
+				<div class="col-md-12 col-md-offset-0 text-left">
+					
+
+					<div class="row row-mt-15em">
+						
+						<div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+							<div class="form-wrap">
+								<div class="tab">
+									
+									<div class="tab-content">
+										<div class="tab-content-inner active" data-content="signup">
+											<h3>USER LOGIN</h3>
+											<form action="/login" method="post">
+												<div class="row form-group">
+													<div class="col-md-12 box">
+														<label for="email">Email</label>
+														<input  name="email" type="email" id="fullname" class="form-control" required>
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-md-12 box">
+														<label for="psw">Password</label>
+														<input name="psw" type="password" id="pass" class="form-control" required>
+													</div>
+												</div>
+										        <!-- <div><span id="errorname" style="color: red"><%= err %></span></div> -->
+												<div class="row form-group">
+													<div class="col-md-12">
+														<input type="submit" class="btn btn-primary btn-block" value="LOGIN">
+													</div>
+												</div>
+											</form>	
+										</div>
+
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+							
+					
+				</div>
+			</div>
+		</div>
+	</header>
 </body>
 </html>
