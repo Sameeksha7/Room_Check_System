@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- <script type="text/javascript" src="booking.js"></script> -->
+  <title>Responsive Table</title>
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  <!-- <link rel="stylesheet" href="/css/style1.css" type="text/css" media="all"> -->
+
+      <link href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,400,700" rel="stylesheet">
+      <link href="//fonts.googleapis.com/css?family=Text+Me+One" rel="stylesheet">
+      <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+      <link rel="stylesheet" href="static/insert_tour.css">
+       <script src="../lib/jquery-1.10.2.min.js"></script>
+        <script src="../lib/underscore-1.5.2.min.js"></script>
+        <script src="../src/jquery.scrollTableBody-1.0.0.js"></script>
+
+  
+</head>
+
+<body>
+  <div class="overlay"></div>
+
+  <div id="throbber" style="display:none; min-height:120px;"></div>
+  <div id="noty-holder"></div>
+  <div id="wrapper">
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <h1 class="webname">BOOK ROOM</h1>
+        </div>
+        <ul class="nav navbar-right top-nav">
+            <li><a href="#" data-placement="bottom" data-toggle="tooltip" href="#" data-original-title="Stats"><i class="fa fa-bar-chart-o"></i>
+                </a>
+            </li>            
+            <li class="dropdown admin">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Admin User <b class="fa fa-angle-down "></b></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/logout"><i class="fa fa-fw fa-power-off"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+     
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+            <ul class="nav navbar-nav side-nav">
+                <li>
+                    <a href="/books"> WELCOME PAGE</a>
+                </li>
+                <li>
+                     <a href="/addRoom">ADD ROOM</a>
+                </li>
+                <li>
+                     <a href="/showRooms">VIEW ROOMS</a>
+                </li>
+                <li>
+                    <a href="/showBookings">VIEW ALL BOOKINGS</a>
+                </li>
+                <li>
+                    <a href="/currentRoom">VIEW CURRENT BOOKINGS</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="space"></div>
+<div class="container">
+            <div class="overlay2" id="overlay2"></div>        
+
+            <div id="TAB2" class="table-users TAB">
+                <div class="header">CURRENT BOOKINGS</div>
+                     <table cellspacing="0" >
+                       <tr>
+                          <td colspan="5">
+                            <div id="myTable">
+                            <table  id="bookingTable">
+                     <tr>
+                         <th style="background-color: #b9d3ee">BOOKING ID</th>
+                         <th style="background-color: #b9d3ee">ROOM ID</th>
+                         <th style="background-color: #b9d3ee">EMAIL </th>
+                         <th style="background-color: #b9d3ee">FROM</th> 
+                         <th style="background-color: #b9d3ee">TO</th>
+                         <th style="background-color: #b9d3ee">CHECKOUT</th>
+                      </tr>
+                               
+                           
+                               {% for i in bookings %}
+                              <tr>
+                                  <td>{{ i.bookingid }}</td>
+                                  <td>{{ i.roomid }}</td>
+                                  <td>{{ i.email}}</td>
+                                  <td>{{ i.from }}</td>
+                                  <td>{{ i.to }}</td>>
+                                  <td><button class="delete">CHECKOUT</button></td>
+                                </tr>    
+                                 {% endfor %}
+                                  </table>
+                          </div>
+                          </td>
+                          </tr>
+                      </tbody>
+                      </table>
+                </div>
+          </div>
+          
+            
+</div>
+ <div class="form1-popup" id="confirmform">
+  <form action="/checkoutRoom" method="post" class="form1-container">
+    <h3>Give permission to checkout?</h3>
+    <input type="hidden" name="delId" id="delId" value="">
+    <button type="submit" class="btn" >Yes</button>
+    <button type="button" class="btn" onclick="closeForm()">No</button>
+  </form>
+      
+      </div>
+      
+</body>
+<script>
+ $(document).ready(function(){
+              $('.delete').click(func);
+              function func(){
+                var $row = $(this).closest("tr"),     
+                $tds = $row.find("td:nth-child(1)");
+                $.each($tds, function() {               
+                 $val= ($(this).text());         
+               });
+                document.getElementById("delId").value = $val;
+                $("#confirmform").css("display","block");
+                $(".overlay2").css("display","block");
+              }
+            })
+          </script>
+</html>
+

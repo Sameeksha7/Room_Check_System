@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>Admin SignIn</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+<header id="gtco-header" class="gtco-cover gtco-cover-md" role="banner" style="background-image: url(images/img_1.jpg); position: fixed;">
+		<div class="overlay"></div>
+		
+		<div class="gtco-container" >
+		<div class="col-md-7 mt-text animate-box heading" data-animate-effect="fadeInUp">
+		    <h1 style="text-align: center;">ADMIN LOGIN PAGE</h1>
+		</div>
+			<div class="row" id="rowcss">
+				<div class="col-md-12 col-md-offset-0 text-left">
+					
+
+					<div class="row row-mt-15em">
+						
+						<div class="col-md-4 col-md-push-1 animate-box" data-animate-effect="fadeInRight">
+							<div class="form-wrap">
+								<div class="tab">
+									
+									<div class="tab-content">
+										<div class="tab-content-inner active" data-content="signup">
+											<h3>ADMIN LOGIN</h3>
+											<form action="details2" method="post">
+												<div class="row form-group">
+													<div class="col-md-12 box">
+														<label for="fullname">User Name</label>
+														<input  name="fullname" type="text" id="fullname" class="form-control" required>
+													</div>
+												</div>
+												<div class="row form-group">
+													<div class="col-md-12 box">
+														<label for="pass">Password</label>
+														<input name="pass" type="password" id="pass" class="form-control" required>
+													</div>
+												</div>
+										        <div><span id="errorname" style="color: red"><%= err %></span></div>
+												<div class="row form-group">
+													<div class="col-md-12">
+														<input type="submit" class="btn btn-primary btn-block" value="LOGIN">
+													</div>
+												</div>
+											</form>	
+										</div>
+
+										
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+							
+					
+				</div>
+			</div>
+		</div>
+	</header>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!-- <script type="text/javascript" src="booking.js"></script> -->
+  <title>page title</title>
+  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+  <!-- <link rel="stylesheet" href="/css/style1.css" type="text/css" media="all"> -->
+
+      <link href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz:200,300,400,700" rel="stylesheet">
+      <link href="//fonts.googleapis.com/css?family=Text+Me+One" rel="stylesheet">
+      <link href="//fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+      <link rel="stylesheet" href="css/insert_tour.css">
+       <script src="../lib/jquery-1.10.2.min.js"></script>
+        <script src="../lib/underscore-1.5.2.min.js"></script>
+        <script src="../src/jquery.scrollTableBody-1.0.0.js"></script>
+
+  
+
+</head>
+<body>
+        {% for i in range (0,rooms|length) %}
+        <h1>FLOOR {{i+1}}</h1>
+            {% for room in rooms[i] %}
+                {% if room=={} %}
+                    {% continue %}
+                {% endif %}
+                <div class="card" style="width: 18rem;" >
+                    <img src="{{ url_for('static', filename='room.jpg') }}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    <h5 class="card-title">{{ room.category }}</h5>
+                    <p class="card-text">PRICE - {{ room.price }}</p>
+                    <p class="card-text">OCCUPANCY - {{ room.capacity }}</p>
+                    <a href="#" class="btn btn-primary">Book Now</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <br>
+        {% endfor %}
+</body>
+</html>
+
+$(document).ready(function(){
+$(".favorite").click(function(){
+clicked = $(this).attr("name");
+$.ajax({
+  type : 'POST',
+  url : "{{url_for('test')}}",
+  contentType: 'application/json;charset=UTF-8',
+  data : {'data':clicked}
+});
+ });
+});
